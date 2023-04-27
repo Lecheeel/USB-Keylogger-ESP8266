@@ -1,0 +1,85 @@
+<!Doctype html>
+<html>
+	<title>Master Key</title>
+	<font face="verdana">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css">
+		<script src="functions.js"></script>
+	</head>
+	
+	<!-- Menu bar -->
+	<div class="topnav">
+		<a href="/">Key Log</a>
+		<a href="index.html">Scripts</a>
+		<a href="live.html">Live Execute</a>
+		<a href="settings.html">Settings</a>
+		<div class="topnav-right">
+			<a href="info.html">About</a>
+		</div>
+	</div>
+	
+	<body>
+		<div id="error"></div>
+		<div class="column" >
+			<div class="twelve columns">
+				<h1 class="header">Settings</h1>
+			</div>
+			<form action="settings.html" method="POST">
+				<h4>Wi-Fi</h4>
+				
+				<span style="font-size: +14px"/>Access Point SSID</span>
+				<input style='float: right; padding: 3px; border-radius: 3px' id="ssid" name="ssid" maxlength="32" minlength="1" value='chicken'>
+				<hr>
+				<span style="font-size: +14px"/>Access Point Password</span>
+				<input style='float: right; padding: 3px; border-radius: 3px' id="pswd" name="pswd" maxlength="32" minlength="8" value='chicken'>
+				<hr>
+				<span style="font-size: +14px"/>Channel</span>
+				<input style='float: right; padding: 3px; border-radius: 3px' type="number" min="1" max="14" value="1" id="ch" name="ch">
+				<hr>
+				<span style="font-size: +14px"/>Hidden</span>
+				<input style='float: right; padding: 3px; border-radius: 3px' type="checkbox" id="hidden" name="hidden" value="enabled" />
+				<hr>
+				
+				<br />
+				<br />
+				<input type="submit" id="submit" value="save">				
+			</form>
+			<br />
+			<br />
+			<form action="restart">
+				<input type="submit" id="submit" href="restart" value="restart">
+			</form>
+		</div>
+		
+		<script>
+			
+			function set(e,v) document.getElementById(e).value = v;
+			function setChecked(e) document.getElementById(e).setAttribute('checked','checked');
+			
+			function loadSettings(){
+				getResponse("settings.json",function(responseText){
+					var res = JSON.parse(responseText);
+					
+					set("ssid",res.ssid);
+					set("pswd",res.password);
+					set("ch",res.channel);
+					set("hidden",res.hidden);
+					set("autostart",res.autostart);
+					if(res.hidden) setChecked("hidden");
+					if(res.autoExec) setChecked("autoExec");
+				});
+			}
+			
+			loadSettings();
+			
+			function restart(){
+				getResponse("restart",function(responseText){},function(){
+					document.getElementById("error").innerHTML = "device is restarting";
+				},1000);
+				
+			}
+			
+		</script>
+	</body>
+</html>
