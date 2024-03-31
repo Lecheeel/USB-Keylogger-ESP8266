@@ -38,4 +38,5 @@
 .vscode/ipch
 
 # lib
-lib/
+lib/*
+!lib/README
